@@ -10,9 +10,15 @@ namespace NetOopFirstApp
     {
         public int X { get; set; }
         public int Y { get; set; }
+
+        public Point(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
     }
 
-    public class Shape
+    public abstract class Shape
     {
         Point point;
 
@@ -35,15 +41,21 @@ namespace NetOopFirstApp
         }
 
         public Shape() { }
-        public Shape(int x, int y)
+
+        public Shape(Point point) : this(point.X, point.Y) { }
+
+        public Shape(int x, int y) 
         {
-            this.X = x;
-            this.Y = y;
+            this.point = new Point(x, y);
         }
-        public Shape(Point point)
+
+        public abstract double Square();
+
+        public virtual void Print()
         {
-            this.point = point;
+            Console.Write($"x = {X}, y = {Y}");
         }
+        
     }
 
     class Rectangle : Shape
@@ -58,6 +70,76 @@ namespace NetOopFirstApp
             this.Width = width;
             this.Height = height;
         }
+
+        public override double Square()
+        {
+            return Width * Height;
+        }
+
+        public override void Print()
+        {
+            base.Print();
+            Console.WriteLine($", width = {Width}, height = {Height}");
+        }
     }
+
+    class Circle : Shape
+    {
+        public int Radius { set; get; }
+        public Circle() { }
+        public Circle(int x, int y, int radius)
+            : base(x, y)
+        {
+            this.Radius = radius;
+        }
+
+        public override double Square()
+        {
+            return 3.1416 * Radius * Radius;
+        }
+
+        public override void Print()
+        {
+            base.Print();
+            Console.WriteLine($", radius = {Radius}");
+        }
+    }
+
+    class Ellipse : Circle
+    {
+        public override void Print()
+        {
+
+        }
+    }
+
+    class Employee
+    {
+        public string? Name { set; get; }
+        public int Age { set; get; }
+
+        public override string ToString()
+        {
+            return $"Name: {Name}, Age: {Age}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if(obj is Employee)
+            {
+                Employee e = (Employee)obj;
+                return this.Name == e.Name && this.Age == e.Age;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return (Name + Age.ToString())!.GetHashCode();
+        }
+    }
+
+    
 }
 
